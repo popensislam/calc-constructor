@@ -1,11 +1,12 @@
 import './index.scss';
+import React from 'react';
 
 const App = () => {
-	return (
-		<div className="app">
+  return (
+    <div className="app">
       Hello World!
-		</div>
-	);
+    </div>
+  );
 };
 
 export default App;

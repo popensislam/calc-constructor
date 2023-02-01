@@ -1,15 +1,15 @@
-import type { Configuration } from "webpack";
-import { buildLoaders } from "./buildLoaders";
-import { buildPlugins } from "./buildPlugins";
-import { buildResolves } from "./buildResolves";
-import { BuildOptions } from "./types/config";
-import { buildDevServer } from "./buildDevServer";
+import type { Configuration } from 'webpack';
+import { buildLoaders } from './buildLoaders';
+import { buildPlugins } from './buildPlugins';
+import { buildResolves } from './buildResolves';
+import { BuildOptions } from './types/config';
+import { buildDevServer } from './buildDevServer';
 
-import 'webpack-dev-server'
+import 'webpack-dev-server';
 
 export function buildWebpackConfig(options: BuildOptions): Configuration {
 
-  const { mode, paths, isDev } = options
+  const { mode, paths, isDev } = options;
 
   return {
     mode: mode,
@@ -20,17 +20,13 @@ export function buildWebpackConfig(options: BuildOptions): Configuration {
       clean: true,
     },
     plugins: buildPlugins(options),
-    module: {
-      rules: buildLoaders(options)
-    },
+    module: { rules: buildLoaders(options) },
     resolve: buildResolves(),
     devtool: isDev ? 'inline-source-map' : undefined,
     devServer: isDev ? buildDevServer(options) : undefined,
     //   maxEntrypointSize: 512000,
     //   maxAssetSize: 512000
     // },
-    performance : {
-      hints : false
-    }     
-  }
+    performance: { hints: false }
+  };
 }

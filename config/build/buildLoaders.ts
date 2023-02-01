@@ -1,5 +1,4 @@
-
-import webpack from 'webpack'
+import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BuildOptions } from './types/config';
 
@@ -10,7 +9,7 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     use: [
       options.isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
       {
-        loader: "css-loader",
+        loader: 'css-loader',
         options: {
           modules: {
             auto: (resPath: string) => Boolean(resPath.includes('.module.')),
@@ -20,7 +19,7 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
           }
         }
       },
-      "sass-loader",
+      'sass-loader',
     ],
   };
 
@@ -30,5 +29,18 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     exclude: /node_modules/,
   };
 
-  return [tsLoader, styleLoader]
+  const tsEslintLoader = {
+    test: /\.(ts|tsx)$/,
+    use: [
+      {
+        options: { eslintPath: require.resolve('eslint'), },
+        loader: require.resolve('eslint-loader'),
+      },
+    ],
+    exclude: /node_modules/,
+  };
+
+  return [ tsLoader,
+    styleLoader,
+    tsEslintLoader ];
 }

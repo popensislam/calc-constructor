@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BuildOptions } from './types/config';
+import ESlintWebpackPlugin from 'eslint-webpack-plugin';
 
 export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstance[] {
 
@@ -22,5 +23,11 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
       filename: 'css/[name].[contenthash:8].css',
       chunkFilename: 'css/[name].[contenthash:8].css',
     }),
-  ]
+    new ESlintWebpackPlugin({
+      extensions: [ 'js',
+        'jsx',
+        'ts',
+        'tsx' ]
+    })
+  ];
 }
