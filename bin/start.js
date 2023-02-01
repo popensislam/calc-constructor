@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { execSync } from 'child_process';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const proChild = require('child_process');
 
 const runCommand = command => {
   try {
-    execSync(`${command}`, { stdio: 'inherit' });
+    proChild.execSync(`${command}`, { stdio: 'inherit' });
   } catch (error) {
     console.error(`Failed to execute ${command}`, error);
     return false;
