@@ -9,7 +9,7 @@
   "scripts": {
     "build:prod": "webpack --env mode=production",
     "build:dev": "webpack --env mode=development",
-    "start": "webpack serve --env port=3000",
+    "start": "webpack serve --env port=8000",
     "lint": "eslint -c .eslintrc.json --ext .ts,.tsx .",
     "lint:fix": "npm run lint -- --fix",
     "postinstall": "npx husky install"

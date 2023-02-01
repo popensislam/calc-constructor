@@ -29,18 +29,16 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     exclude: /node_modules/,
   };
 
-  const tsEslintLoader = {
-    test: /\.(ts|tsx)$/,
-    use: [
-      {
-        options: { eslintPath: require.resolve('eslint'), },
-        loader: require.resolve('eslint-loader'),
-      },
-    ],
-    exclude: /node_modules/,
-  };
+  // const tsEslintLoader = {
+  //   test: /\.(ts|tsx)$/,
+  //   use: [
+  //     {
+  //       options: { eslintPath: require.resolve('eslint'), },
+  //       loader: require.resolve('eslint-loader'),
+  //     },
+  //   ],
+  //   exclude: /node_modules/,
+  // };
 
-  return [ tsLoader,
-    styleLoader,
-    tsEslintLoader ];
+  return [ tsLoader, styleLoader, ];
 }
