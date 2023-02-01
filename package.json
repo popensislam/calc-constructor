@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "create-react-isa": "./bin/start.js"
+    "create-react-isa": "./bin/cli.js"
   },
   "scripts": {
     "build:prod": "webpack --env mode=production",
