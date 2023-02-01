@@ -1,14 +1,18 @@
 {
   "name": "create-react-isa",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "create-react-isa": "./bin/start.js"
+  },
   "scripts": {
     "build:prod": "webpack --env mode=production",
     "build:dev": "webpack --env mode=development",
     "start": "webpack serve --env port=3000",
     "lint": "eslint -c .eslintrc.json --ext .ts,.tsx .",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "postinstall": "npx husky install"
   },
   "author": "",
   "license": "ISC",
@@ -38,6 +42,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "graceful-fs": "^4.2.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
