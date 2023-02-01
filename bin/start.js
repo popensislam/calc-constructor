@@ -1,5 +1,7 @@
+#!usr/bin/env node
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const proChild = require('child_process');
