@@ -1,10 +1,10 @@
 {
   "name": "create-react-isa",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "",
   "main": "index.js",
   "bin": {
-    "create-react-isa": "./bin/cli.js"
+    "create-react-isa": "./bin/start.js"
   },
   "scripts": {
     "build:prod": "webpack --env mode=production",
