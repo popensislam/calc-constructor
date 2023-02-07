@@ -4,6 +4,20 @@ import { BuildOptions } from './types/config';
 
 export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
 
+
+  const fileLoader = {
+    test: /\.(png|jpe?g|gif|woff|woff2)$/i,
+    use: [
+      { loader: 'file-loader', },
+    ],
+  };
+
+  const svgrLoader = {
+    test: /\.svg$/i,
+    issuer: /\.[jt]sx?$/,
+    use: [ '@svgr/webpack' ],
+  };
+
   const styleLoader = {
     test: /\.s[ac]ss$/i,
     use: [
@@ -29,16 +43,8 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
     exclude: /node_modules/,
   };
 
-  // const tsEslintLoader = {
-  //   test: /\.(ts|tsx)$/,
-  //   use: [
-  //     {
-  //       options: { eslintPath: require.resolve('eslint'), },
-  //       loader: require.resolve('eslint-loader'),
-  //     },
-  //   ],
-  //   exclude: /node_modules/,
-  // };
-
-  return [ tsLoader, styleLoader, ];
+  return [ tsLoader,
+    styleLoader,
+    svgrLoader,
+    fileLoader ];
 }
