@@ -3,10 +3,13 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BuildOptions } from './types/config';
 import ESlintWebpackPlugin from 'eslint-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstance[] {
 
-  return [
+  const { isDev } = options;
+
+  const plugins = [
     new HtmlWebpackPlugin({ template: options.paths.html }),
     new webpack.ProgressPlugin({
       activeModules: false,
@@ -27,6 +30,9 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
         'jsx',
         'ts',
         'tsx' ]
-    })
+    }),
+    isDev && new ReactRefreshWebpackPlugin()
   ];
+
+  return plugins.filter(Boolean);
 }
