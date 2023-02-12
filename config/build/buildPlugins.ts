@@ -31,8 +31,11 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
         'ts',
         'tsx' ]
     }),
-    isDev && new ReactRefreshWebpackPlugin()
-  ].filter(Boolean);
+  ];
 
-  return plugins.filter(Boolean);
+  if (isDev) {
+    plugins.push(new ReactRefreshWebpackPlugin());
+  }
+
+  return plugins;
 }
