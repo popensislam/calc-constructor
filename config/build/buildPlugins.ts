@@ -32,7 +32,7 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
         'tsx' ]
     }),
     isDev && new ReactRefreshWebpackPlugin()
-  ];
+  ].filter(Boolean);
 
   return plugins.filter(Boolean);
 }
