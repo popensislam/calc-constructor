@@ -21,7 +21,7 @@ export function buildWebpackConfig(options: BuildOptions): Configuration {
     },
     plugins: buildPlugins(options),
     module: { rules: buildLoaders(options) },
-    resolve: buildResolves(),
+    resolve: buildResolves(options),
     devtool: isDev ? 'inline-source-map' : undefined,
     devServer: isDev ? buildDevServer(options) : undefined,
     //   maxEntrypointSize: 512000,
