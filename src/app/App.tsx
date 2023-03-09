@@ -1,4 +1,4 @@
-import 'index.scss';
+import './styles/index.scss';
 
 const App = () => {
   return (

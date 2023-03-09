@@ -31,6 +31,7 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
         'ts',
         'tsx' ]
     }),
+    new webpack.DefinePlugin({ __IS_DEV__: isDev }),
   ];
 
   if (isDev) {
