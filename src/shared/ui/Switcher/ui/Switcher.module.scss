@@ -1,0 +1,61 @@
+.switcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 238px;
+    background: #F3F4F6;
+    border-radius: 6px;
+    height: 36px;
+    padding: 1px;
+    z-index: 1;
+}
+
+.background {
+    position: absolute;
+    top: 50%;
+    background: #fff;
+    height: 85%;
+    width: 50%;
+    border-radius: 6px;
+    border: 1px solid #E2E3E5;
+    transform: translate(0, -50%);
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.iconStrokeLeft,
+.iconStrokeRight {
+    stroke: #4D5562;
+    transition: all 0.3s ease;
+}
+
+.left {
+    .background {
+        left: 1%;
+    }
+
+    .iconStrokeLeft {
+        stroke: #5D5FEF;
+    }
+}
+
+.right {
+    .background {
+        left: 48.5%;
+    }
+
+    .iconStrokeRight {
+        stroke: #5D5FEF;
+    }
+}
+
+.buttonElm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+}

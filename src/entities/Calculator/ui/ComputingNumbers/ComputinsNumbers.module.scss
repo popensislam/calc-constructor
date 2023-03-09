@@ -1,0 +1,24 @@
+.numbers { 
+    display: grid;
+    grid-template:
+      "one-1 one-2 one-3" 48px
+      "one-4 one-5 one-6" 48px
+      "one-7 one-8 one-9" 48px
+      "one-0 one-0 one-exm" 48px;
+    gap: 8px;
+    justify-content: center;
+    width: 220px;
+}
+
+.buttonGrid {
+    height: 100%;
+}
+
+.zero {
+    grid-area: one-0;
+    width: 100%;
+}
+
+.sign {
+    grid-area: one-exm;
+}

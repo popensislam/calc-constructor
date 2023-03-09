@@ -2,7 +2,6 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BuildOptions } from './types/config';
-import ESlintWebpackPlugin from 'eslint-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstance[] {
@@ -24,12 +23,6 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',
       chunkFilename: 'css/[name].[contenthash:8].css',
-    }),
-    new ESlintWebpackPlugin({
-      extensions: [ 'js',
-        'jsx',
-        'ts',
-        'tsx' ]
     }),
     new webpack.DefinePlugin({ __IS_DEV__: isDev }),
   ];

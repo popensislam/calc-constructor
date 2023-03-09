@@ -1,0 +1,39 @@
+
+.calculator {
+    margin-top: 38px;
+}
+
+.switcher {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.content {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 10px;
+    margin-top: 30px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.contentConstructor {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    margin-right: 10px;
+    margin-top: 30px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.none {
+    display: none;
+}

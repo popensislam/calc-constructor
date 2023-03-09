@@ -1,9 +1,13 @@
+import { CalculatorPage } from 'pages/CalculatorPage';
 import './styles/index.scss';
 
 const App = () => {
+
   return (
     <div className="app">
-      Hello World!
+      <div className='container'>
+        <CalculatorPage/>
+      </div>
     </div>
   );
 };

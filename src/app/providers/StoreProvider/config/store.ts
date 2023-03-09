@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-
+import { calculatorReducer } from 'entities/Calculator';
 
 export function createReduxStore() {
   return configureStore({
-    reducer: {},
+    reducer: { calc: calculatorReducer },
     devTools: __IS_DEV__,
   });
 }

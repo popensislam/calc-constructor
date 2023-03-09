@@ -1,0 +1,13 @@
+.signs {
+    display: grid;
+    grid-template-columns: 52px 52px 52px 52px;
+    gap: 8px;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+}
+
+.button {
+    width: 52px;
+}
