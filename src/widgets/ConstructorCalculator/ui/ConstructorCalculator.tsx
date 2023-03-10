@@ -3,6 +3,7 @@ import { DragEvent, useState } from 'react';
 import { classNames } from 'shared/lib';
 import { Button, VariantButton } from 'shared/ui/Button';
 import { Paper } from 'shared/ui/Paper';
+import { SpaceGet } from 'shared/ui/SpaceGet';
 import cls from './ConstructorCalculator.module.scss';
 
 interface ConstructorCalculatorProps {
@@ -139,7 +140,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
   ];
 
   return (
-    <div>
+    <div className={cls.constructorCalc}>
       <div className={cls.calculator}>
         {arr.map((elm: DragCard, i: number) =>
           <div className={classNames(cls.dnd, {}, [ 'item' ])} key={i}>
@@ -198,6 +199,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
           </div>
         )}
       </div>
+      <SpaceGet/>
     </div>
   );
 };
