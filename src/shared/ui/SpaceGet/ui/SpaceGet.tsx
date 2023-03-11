@@ -1,13 +1,14 @@
-import { DragEvent } from 'react';
+import { DragEvent, DragEventHandler } from 'react';
 import { classNames } from 'shared/lib';
 import Img from 'shared/assets/icon/img.svg';
 import cls from './SpaceGet.module.scss';
 
 interface SpaceGetProps {
-    className?: string
+    className?: string,
+    onDropHandler: DragEventHandler
 }
 
-export const SpaceGet = ({ className }: SpaceGetProps) => {
+export const SpaceGet = ({ className, onDropHandler }: SpaceGetProps) => {
 
 
   const dragOverHandler = (e: DragEvent): void => {
@@ -32,6 +33,7 @@ export const SpaceGet = ({ className }: SpaceGetProps) => {
       onDragEnd={dragEndHandler}
       onDragLeave={dragLeaveHandler}
       onDragOver={dragOverHandler}
+      onDrop={onDropHandler}
       className={classNames(cls.space, {}, [ className ])}
     >
       <Img/>

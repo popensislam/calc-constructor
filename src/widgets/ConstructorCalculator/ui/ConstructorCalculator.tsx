@@ -1,5 +1,5 @@
 import { ComputingSigns, ComputinsNumbers, Output } from 'entities/Calculator';
-import { DragEvent, useState } from 'react';
+import { DragEvent, ReactElement, useState } from 'react';
 import { classNames } from 'shared/lib';
 import { Button, VariantButton } from 'shared/ui/Button';
 import { Paper } from 'shared/ui/Paper';
@@ -10,9 +10,16 @@ interface ConstructorCalculatorProps {
     className?: string
 }
 
+interface IComponents {
+  id: number,
+  taken: boolean,
+  Component: () => ReactElement
+}
+
 interface DragCard {
   id: number,
-  elm: number
+  elm: number,
+  index?: number
 }
 
 interface ITaken {
@@ -29,7 +36,9 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
 
   const [ taken, setTaken ] = useState<ITaken | null>(null);
 
-  const [ arr, setArr ] = useState<DragCard[]>([
+  const [ arr, setArr ] = useState<DragCard[]>([]);
+
+  const [ arrToTake, setArrToTake ] = useState<DragCard[]>([
     { id: 1, elm: 0 },
     { id: 2, elm: 1 },
     { id: 3, elm: 2 },
@@ -37,9 +46,48 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
   ]);
 
   const [ currentItem, setCurrentItem ] = useState<DragCard | null>(null);
+  const [ components, setComponents ] = useState<IComponents[]>([
+    {
+      id: 1,
+      taken: false,
+      Component: () => (
+        <Paper>
+          <Output/>
+        </Paper>
+      ),
+    },
+    {
+      id: 2,
+      taken: false,
+      Component: () => (
+        <Paper className={cls.signsWrapper}>
+          <ComputingSigns/>
+        </Paper>
+      ),
+    },
+    {
+      id: 3,
+      taken: false,
+      Component: () => (
+        <Paper className={cls.numbersWrapper}>
+          <ComputinsNumbers/>
+        </Paper>
+      ),
+    },
+    {
+      id: 4,
+      taken: false,
+      Component: () => (
+        <Paper>
+          <Button theme={VariantButton.equal}>=</Button>
+        </Paper>
+      ),
+    }
+  ]);
 
   /** DRAG AND DROP HANDLERS */
 
+  /** add style when it under comp */
   const dragOverHandler = (e: DragEvent, i: number, type: HoverTypeDrop): void => {
     e.preventDefault();
 
@@ -48,27 +96,43 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
     }
   };
 
+  /** remove styles */
   const dragEndHandler = (): void => {
     if (taken !== null) {
       setTaken(null);
     }
   };
 
+  /** remove styles */
   const dragLeaveHandler = (): void => {
     if (taken !== null) {
       setTaken(null);
     }
   };
 
-  const dragStartHandler = (e: DragEvent, elm: DragCard): void => {
-    setCurrentItem(elm);
+  /** save taken item */
+  const dragStartHandler = (e: DragEvent, elm: DragCard, i: number): void => {
+    setCurrentItem({ ...elm, index: i });
   };
 
-  const dropHandler = (e: DragEvent, card: DragCard, from: number, till: number): void => {
+  /** drop */
+  const dropHandler = (e: DragEvent, card: DragCard, from: number, type: HoverTypeDrop): void => {
     e.preventDefault();
 
-    const arrWithourTaken: DragCard[] = arr.filter((item) => item.id !== currentItem.id);
+    const foundIndex = arr.findIndex((item) => item.id === currentItem.id);
 
+    if (foundIndex === -1) {
+      const newComponents = components.map((item) => {
+        if (item.id === components[ currentItem.elm ].id) {
+          return { ...item, taken: true };
+        } else {
+          return item;
+        }
+      });
+      setComponents(newComponents);
+    }
+
+    const arrWithourTaken: DragCard[] = arr.filter((item) => item.id !== currentItem.id);
     /**
      * Put it in the begining
      */
@@ -82,7 +146,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
     /**
      * Put it in the end
      */
-    if (from === arr.length - 1) {
+    if (type === HoverTypeDrop.DOWN) {
       const result: DragCard[] = [ ...arrWithourTaken, currentItem ];
       setArr(result);
       setTaken(null);
@@ -93,113 +157,116 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
      * Slice array in 2 part to put taken one between them
      */
 
-    const firstSliced: DragCard[] = arrWithourTaken.slice(0, till);
-    const secondSliced: DragCard[] = arrWithourTaken.slice(from - 1);
+    const firstSliced: DragCard[] = arrWithourTaken.slice(0, currentItem.index < from ? from - 1 : from);
+    const secondSliced: DragCard[] = arrWithourTaken.slice(currentItem.index < from ? from - 1 : from);
 
-    const resultArr: DragCard[] = [ ...firstSliced,
+    setArr([ ...firstSliced,
       currentItem,
-      ...secondSliced ];
+      ...secondSliced ]);
 
-    setArr(resultArr);
     setTaken(null);
   };
 
-  const components = [
-    {
-      id: 1,
-      Component: () => (
-        <Paper>
-          <Output/>
-        </Paper>
-      ),
-    },
-    {
-      id: 2,
-      Component: () => (
-        <Paper className={cls.signsWrapper}>
-          <ComputingSigns/>
-        </Paper>
-      ),
-    },
-    {
-      id: 3,
-      Component: () => (
-        <Paper className={cls.numbersWrapper}>
-          <ComputinsNumbers/>
-        </Paper>
-      ),
-    },
-    {
-      id: 4,
-      Component: () => (
-        <Paper>
-          <Button theme={VariantButton.equal}>=</Button>
-        </Paper>
-      ),
-    }
-  ];
+  const dragOverHandlerToTake = (e: DragEvent) => {
+    e.preventDefault();
+  };
+
+  const onDropHandlerSpace = () => {
+
+    const newComponents = components.map((item) => {
+      if (item.id === components[ currentItem.elm ].id) {
+        return { ...item, taken: true };
+      } else {
+        return item;
+      }
+    });
+    setComponents(newComponents);
+
+    setArr([ ...arr, currentItem ]);
+
+  };
 
   return (
-    <div className={cls.constructorCalc}>
-      <div className={cls.calculator}>
-        {arr.map((elm: DragCard, i: number) =>
-          <div className={classNames(cls.dnd, {}, [ 'item' ])} key={i}>
+    <div className={classNames(cls.constructorCalc, { [ cls.consPad ]: arr.length !== 0 }, [])}>
 
-            <div
-              draggable={true}
-              onDragEnd={dragEndHandler}
-              onDragLeave={dragLeaveHandler}
-              onDragOver={(e) => dragOverHandler(e, i, HoverTypeDrop.UP)}
-              onDrop={(e) => dropHandler(e, elm, i, i - 1)}
-              className={cls.wrapperLine}
-            >
-              <div
-                className={classNames(
-                  cls.line,
-                  {
-                    [ cls.bg ]:
-                    taken !== null
-                      ? i === taken.elm && HoverTypeDrop.UP === taken.type
-                      : false
-                  },
-                  []
-                )}
-              />
-            </div>
-
-            <div
-              onDragStart={(e) => dragStartHandler(e, elm)}
-              draggable={true}
-            >
-              {components[ elm.elm ].Component()}
-            </div>
-
-            {i === components.length - 1 && (
-              <div
-                draggable={true}
-                onDragEnd={dragEndHandler}
-                onDragLeave={dragLeaveHandler}
-                onDragOver={(e) => dragOverHandler(e, i, HoverTypeDrop.DOWN)}
-                onDrop={(e) => dropHandler(e, elm, i, i - 1)}
-                className={cls.wrapperLine}
-              >
-                <div
-                  className={classNames(
-                    cls.line,
-                    {
-                      [ cls.bg ]:
-                      taken !== null
-                        ? i === taken.elm && HoverTypeDrop.DOWN === taken.type
-                        : false
-                    },
-                    [])}
-                />
-              </div>
-            )}
+      <div className={cls.toTake}>
+        {arrToTake.map((elm: DragCard, i: number) =>
+          <div
+            className={classNames(cls.bg, { [ cls.bgDark ]: components[ elm.elm ].taken })} key={elm.id}
+            draggable={true}
+            onDragStart={(e) => dragStartHandler(e, elm, i)}
+            onDragOver={(e) => dragOverHandlerToTake(e)}
+          >
+            {components[ elm.elm ]?.Component()}
           </div>
         )}
       </div>
-      <SpaceGet/>
+
+      {arr.length !== 0
+        ? (
+          <div className={cls.calculator}>
+            {arr.map((elm: DragCard, i: number) =>
+              <div className={classNames(cls.dnd, {}, [ 'item' ])} key={i}>
+
+                <div
+                  draggable={true}
+                  onDragEnd={dragEndHandler}
+                  onDragLeave={dragLeaveHandler}
+                  onDragOver={(e) => dragOverHandler(e, i, HoverTypeDrop.UP)}
+                  onDrop={(e) => dropHandler(e, elm, i, HoverTypeDrop.UP)}
+                  className={cls.wrapperLine}
+                >
+                  <div
+                    className={classNames(
+                      cls.line,
+                      {
+                        [ cls.bg ]:
+                    taken !== null
+                      ? i === taken.elm && HoverTypeDrop.UP === taken.type
+                      : false
+                      },
+                      []
+                    )}
+                  />
+                </div>
+
+                <div
+                  onDragStart={(e) => dragStartHandler(e, elm, i)}
+                  draggable={true}
+                >
+                  {components[ elm.elm ]?.Component()}
+                </div>
+
+                {i === arr.length - 1 && (
+                  <div
+                    draggable={true}
+                    onDragEnd={dragEndHandler}
+                    onDragLeave={dragLeaveHandler}
+                    onDragOver={(e) => dragOverHandler(e, i, HoverTypeDrop.DOWN)}
+                    onDrop={(e) => dropHandler(e, elm, i, HoverTypeDrop.DOWN)}
+                    className={cls.wrapperLine}
+                  >
+                    <div
+                      className={classNames(
+                        cls.line,
+                        {
+                          [ cls.bg ]:
+                      taken !== null
+                        ? i === taken.elm && HoverTypeDrop.DOWN === taken.type
+                        : false
+                        },
+                        [])}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )
+        : (
+          <SpaceGet onDropHandler={onDropHandlerSpace}/>
+        )
+      }
     </div>
   );
 };

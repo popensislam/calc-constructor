@@ -2,6 +2,11 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    transition: all 0.2s ease;
+}
+
+.consPad {
+    padding: 12px;
 }
 
 .calculator{
@@ -80,4 +85,16 @@
 
 .signsWrapper {
     padding: 10px;
+}
+
+.toTake {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.bgDark {
+    opacity: 0.5;
 }
