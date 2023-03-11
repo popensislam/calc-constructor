@@ -7,11 +7,7 @@ import SelectorIcon from 'shared/assets/icon/selector.svg';
 import { classNames } from 'shared/lib';
 import { ConstructorCalculator } from 'widgets/ConstructorCalculator';
 
-interface CalculatorPageProps {
-    className?: string
-}
-
-export const CalculatorPage = ({ className }: CalculatorPageProps) => {
+export const CalculatorPage = () => {
 
   const [ side, setSide ] = useState(SwitcherVairants.LEFT);
 
