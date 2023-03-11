@@ -1,7 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { CalculatorSchema } from '../types/calculatorSchema';
 
-const initialState: CalculatorSchema = { value: '0', a: '', b: '', sign: '', empty: false };
+const initialState: CalculatorSchema = {
+  value: '0',
+  a: '',
+  b: '',
+  sign: '',
+  empty: false,
+  order: [ { id: 1, elm: 0 },
+    { id: 2, elm: 1 },
+    { id: 3, elm: 2 },
+    { id: 4, elm: 3 } ],
+};
 
 export const calculatorSlice = createSlice({
   name: 'calculator',
@@ -60,6 +70,9 @@ export const calculatorSlice = createSlice({
       state.a = '';
       state.b = '';
       state.sign = '';
+    },
+    order: (state, { payload }) => {
+      state.order = payload;
     }
   },
 });

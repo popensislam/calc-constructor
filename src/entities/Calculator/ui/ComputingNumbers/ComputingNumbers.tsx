@@ -5,10 +5,11 @@ import { calculatorActions } from 'entities/Calculator';
 import cls from './ComputinsNumbers.module.scss';
 
 interface ComputinsNumbersProps {
-    className?: string
+    className?: string,
+    disabled?: boolean
 }
 
-export const ComputinsNumbers = ({ className }: ComputinsNumbersProps) => {
+export const ComputinsNumbers = ({ className, disabled = false }: ComputinsNumbersProps) => {
 
   const dispatch = useAppDispatch();
 
@@ -34,17 +35,20 @@ export const ComputinsNumbers = ({ className }: ComputinsNumbersProps) => {
           className={cls.buttonGrid}
           theme={VariantButton.layer}
           onClick={() => chooseNumber(elm)}
+          disabled={disabled}
         >{elm}</Button>
       )}
       <Button
         theme={VariantButton.layer}
         className={classNames(cls.buttonGrid, {}, [ cls.zero ])}
         onClick={() => chooseNumber('0')}
+        disabled={disabled}
       >0</Button>
       <Button
         theme={VariantButton.layer}
         className={classNames(cls.buttonGrid, {}, [ cls.sign ])}
         onClick={() => chooseNumber('.')}
+        disabled={disabled}
       >,</Button>
     </div>
   );

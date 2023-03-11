@@ -4,10 +4,11 @@ import { Button, VariantButton } from 'shared/ui/Button';
 import cls from './ComputingSigns.module.scss';
 
 interface ComputingSignsProps {
-    className?: string
+    className?: string,
+    disabled?: boolean
 }
 
-export const ComputingSigns = ({ className }: ComputingSignsProps) => {
+export const ComputingSigns = ({ className, disabled = false }: ComputingSignsProps) => {
 
   const dispatch = useAppDispatch();
 
@@ -23,7 +24,7 @@ export const ComputingSigns = ({ className }: ComputingSignsProps) => {
   return (
     <div className={cls.signs}>
       {signs.map((sign: string) =>
-        <Button key={sign} className={cls.button} onClick={() => chooseSign(sign)} theme={VariantButton.layer}>{sign}</Button>
+        <Button disabled={disabled} key={sign} className={cls.button} onClick={() => chooseSign(sign)} theme={VariantButton.layer}>{sign}</Button>
       )}
     </div>
   );

@@ -1,10 +1,13 @@
-import { ComputingSigns, ComputinsNumbers, Output } from 'entities/Calculator';
-import { DragEvent, ReactElement, useState } from 'react';
+import { useAppDispatch } from 'app/providers/StoreProvider';
+import { calculatorActions, ComputingSigns, ComputinsNumbers, Output } from 'entities/Calculator';
+import { DragEvent, ReactElement, useEffect, useState } from 'react';
 import { classNames } from 'shared/lib';
 import { Button, VariantButton } from 'shared/ui/Button';
 import { Paper } from 'shared/ui/Paper';
 import { SpaceGet } from 'shared/ui/SpaceGet';
 import cls from './ConstructorCalculator.module.scss';
+import type { DragCard } from 'entities/Calculator';
+import { CalculatorElements } from 'features/CalculatorElements/ui/CalculatorElements';
 
 interface ConstructorCalculatorProps {
     className?: string
@@ -14,12 +17,6 @@ interface IComponents {
   id: number,
   taken: boolean,
   Component: () => ReactElement
-}
-
-interface DragCard {
-  id: number,
-  elm: number,
-  index?: number
 }
 
 interface ITaken {
@@ -34,16 +31,11 @@ enum HoverTypeDrop {
 
 export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps) => {
 
+  const dispatch = useAppDispatch();
+
   const [ taken, setTaken ] = useState<ITaken | null>(null);
 
   const [ arr, setArr ] = useState<DragCard[]>([]);
-
-  const [ arrToTake, setArrToTake ] = useState<DragCard[]>([
-    { id: 1, elm: 0 },
-    { id: 2, elm: 1 },
-    { id: 3, elm: 2 },
-    { id: 4, elm: 3 }
-  ]);
 
   const [ currentItem, setCurrentItem ] = useState<DragCard | null>(null);
   const [ components, setComponents ] = useState<IComponents[]>([
@@ -52,7 +44,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
       taken: false,
       Component: () => (
         <Paper>
-          <Output/>
+          <Output className={cls.grab}/>
         </Paper>
       ),
     },
@@ -61,7 +53,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
       taken: false,
       Component: () => (
         <Paper className={cls.signsWrapper}>
-          <ComputingSigns/>
+          <ComputingSigns disabled={true}/>
         </Paper>
       ),
     },
@@ -70,7 +62,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
       taken: false,
       Component: () => (
         <Paper className={cls.numbersWrapper}>
-          <ComputinsNumbers/>
+          <ComputinsNumbers disabled={true}/>
         </Paper>
       ),
     },
@@ -79,11 +71,15 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
       taken: false,
       Component: () => (
         <Paper>
-          <Button theme={VariantButton.equal}>=</Button>
+          <Button theme={VariantButton.equal} disabled={true}>=</Button>
         </Paper>
       ),
     }
   ]);
+
+  useEffect(() => {
+    dispatch(calculatorActions.order(arr));
+  }, [ arr, dispatch ]);
 
   /** DRAG AND DROP HANDLERS */
 
@@ -136,7 +132,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
     /**
      * Put it in the begining
      */
-    if (from === 0) {
+    if (from === 0 && type !== HoverTypeDrop.DOWN) {
       const result: DragCard[] = [ currentItem, ...arrWithourTaken ];
       setArr(result);
       setTaken(null);
@@ -167,10 +163,6 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
     setTaken(null);
   };
 
-  const dragOverHandlerToTake = (e: DragEvent) => {
-    e.preventDefault();
-  };
-
   const onDropHandlerSpace = () => {
 
     const newComponents = components.map((item) => {
@@ -186,23 +178,16 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
 
   };
 
+  /** CONDITIONS */
+
+  const ARR_IS_FULL = arr.length !== 0;
+
   return (
     <div className={classNames(cls.constructorCalc, { [ cls.consPad ]: arr.length !== 0 }, [])}>
 
-      <div className={cls.toTake}>
-        {arrToTake.map((elm: DragCard, i: number) =>
-          <div
-            className={classNames(cls.bg, { [ cls.bgDark ]: components[ elm.elm ].taken })} key={elm.id}
-            draggable={true}
-            onDragStart={(e) => dragStartHandler(e, elm, i)}
-            onDragOver={(e) => dragOverHandlerToTake(e)}
-          >
-            {components[ elm.elm ]?.Component()}
-          </div>
-        )}
-      </div>
+      <CalculatorElements dragStartHandler={dragStartHandler} components={components}/>
 
-      {arr.length !== 0
+      {ARR_IS_FULL
         ? (
           <div className={cls.calculator}>
             {arr.map((elm: DragCard, i: number) =>
@@ -221,9 +206,9 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
                       cls.line,
                       {
                         [ cls.bg ]:
-                    taken !== null
-                      ? i === taken.elm && HoverTypeDrop.UP === taken.type
-                      : false
+                          taken !== null
+                            ? i === taken.elm && HoverTypeDrop.UP === taken.type
+                            : false
                       },
                       []
                     )}
@@ -233,6 +218,7 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
                 <div
                   onDragStart={(e) => dragStartHandler(e, elm, i)}
                   draggable={true}
+                  className={cls.grab}
                 >
                   {components[ elm.elm ]?.Component()}
                 </div>
@@ -251,9 +237,9 @@ export const ConstructorCalculator = ({ className }: ConstructorCalculatorProps)
                         cls.line,
                         {
                           [ cls.bg ]:
-                      taken !== null
-                        ? i === taken.elm && HoverTypeDrop.DOWN === taken.type
-                        : false
+                            taken !== null
+                              ? i === taken.elm && HoverTypeDrop.DOWN === taken.type
+                              : false
                         },
                         [])}
                     />
