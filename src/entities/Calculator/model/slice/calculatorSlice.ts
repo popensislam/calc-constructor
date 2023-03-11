@@ -73,6 +73,10 @@ export const calculatorSlice = createSlice({
     },
     order: (state, { payload }) => {
       state.order = payload;
+    },
+    emptyValue: (state) => {
+      state.value = '0';
+      state.empty = true;
     }
   },
 });

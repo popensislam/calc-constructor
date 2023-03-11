@@ -6,18 +6,25 @@ import EyeIcon from 'shared/assets/icon/eye.svg';
 import SelectorIcon from 'shared/assets/icon/selector.svg';
 import { classNames } from 'shared/lib';
 import { ConstructorCalculator } from 'widgets/ConstructorCalculator';
+import { useAppDispatch } from 'app/providers/StoreProvider';
+import { calculatorActions } from 'entities/Calculator';
 
 export const CalculatorPage = () => {
 
+  const dispatch = useAppDispatch();
   const [ side, setSide ] = useState(SwitcherVairants.LEFT);
-
   const [ none, setNone ] = useState('');
 
   useEffect(() => {
     setTimeout(() => {
       setNone(side === SwitcherVairants.LEFT ? SwitcherVairants.RIGHT : SwitcherVairants.LEFT);
     }, 300);
-  }, [ side ]);
+
+    if (side === SwitcherVairants.RIGHT) {
+      dispatch(calculatorActions.emptyValue());
+    }
+
+  }, [ dispatch, side ]);
 
   const runtimeMods = { [ cls.show ]: side === SwitcherVairants.LEFT, [ cls.none ]: none === SwitcherVairants.LEFT };
   const constructorMods = { [ cls.show ]: side === SwitcherVairants.RIGHT, [ cls.none ]: none === SwitcherVairants.RIGHT };
